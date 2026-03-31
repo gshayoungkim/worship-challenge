@@ -78,7 +78,7 @@ export default function LoginPage() {
             <Heart fill="currentColor" size={40} />
           </div>
           <div>
-            <h1 className="text-3xl font-black text-amber-900 tracking-tight">365 가정예배</h1>
+            <h1 className="text-3xl font-black text-amber-900 tracking-tight">동행교회 365 가정예배</h1>
             <p className="text-amber-600 font-bold text-sm">부활절 13일 챌린지 · 4/6 – 4/18</p>
           </div>
         </div>
@@ -145,7 +145,7 @@ export default function LoginPage() {
         </div>
 
         <p className="text-[10px] text-amber-400 font-bold">
-          © 2026 Church Family Worship Challenge
+          © 2026 WalkTogether Church Family Worship Challenge
         </p>
       </div>
     </div>
