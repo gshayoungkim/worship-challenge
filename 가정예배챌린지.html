@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>365 가정예배 챌린지 🏠</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Gaegu:wght@400;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --cream: #FFF8EE;
+            --warm-yellow: #FFD166;
+            --coral: #FF6B6B;
+            --mint: #A8E6CF;
+            --sky: #B8E4F9;
+            --purple: #C9B8E8;
+            --brown: #5C3D2E;
+            --orange: #FF9F43;
+            --green: #6BCB77;
+            --pink: #FFB3C1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: var(--cream);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ── Decorative background blobs ── */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -120px;
+            right: -100px;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, #FFE5B4 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -100px;
+            left: -80px;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, #D4F5E9 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ── Header ── */
+        header {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 40px 20px 30px;
+        }
+
+        .header-badge {
+            display: inline-block;
+            background: var(--warm-yellow);
+            color: var(--brown);
+            font-size: 12px;
+            font-weight: 700;
+            padding: 5px 16px;
+            border-radius: 20px;
+            border: 2px solid var(--brown);
+            margin-bottom: 14px;
+            letter-spacing: 1px;
+            animation: bounceIn 0.6s ease;
+        }
+
+        .header-title {
+            font-family: 'Gaegu', cursive;
+            font-size: clamp(32px, 7vw, 52px);
+            font-weight: 700;
+            color: var(--brown);
+            line-height: 1.2;
+            animation: slideDown 0.7s ease;
+        }
+
+        .header-title span {
+            color: var(--coral);
+            display: inline-block;
+            animation: wiggle 1.5s ease-in-out infinite;
+        }
+
+        .header-sub {
+            font-size: 14px;
+            color: #8a6a5a;
+            margin-top: 10px;
+            font-weight: 500;
+            animation: slideDown 0.9s ease;
+        }
+
+        .date-pill {
+            display: inline-block;
+            margin-top: 12px;
+            background: white;
+            border: 2px solid var(--orange);
+            border-radius: 20px;
+            padding: 6px 20px;
+            font-size: 13px;
+            color: var(--orange);
+            font-weight: 700;
+        }
+
+        /* ── Main container ── */
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 16px 60px;
+            position: relative;
+            z-index: 5;
+        }
+
+        /* ── Section titles ── */
+        .section-title {
+            font-family: 'Gaegu', cursive;
+            font-size: 20px;
+            color: var(--brown);
+            font-weight: 700;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* ── Name input card ── */
+        .login-card {
+            background: white;
+            border-radius: 20px;
+            border: 2.5px solid var(--brown);
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 4px 4px 0 var(--warm-yellow);
+        }
+
+        .name-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .name-input {
+            flex: 1;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-size: 15px;
+            font-family: 'Noto Sans KR', sans-serif;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .name-input:focus {
+            border-color: var(--orange);
+        }
+
+        .btn-enter {
+            background: var(--coral);
+            color: white;
+            border: 2px solid var(--brown);
+            border-radius: 12px;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Noto Sans KR', sans-serif;
+            transition: transform 0.1s;
+            white-space: nowrap;
+        }
+
+        .btn-enter:hover {
+            transform: scale(1.05);
+        }
+
+        .current-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-chip {
+            background: linear-gradient(135deg, var(--warm-yellow), var(--orange));
+            border: 2px solid var(--brown);
+            border-radius: 14px;
+            padding: 8px 18px;
+            font-weight: 700;
+            color: var(--brown);
+            font-size: 15px;
+            flex: 1;
+        }
+
+        .btn-change {
+            background: #f0f0f0;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            padding: 8px 14px;
+            font-size: 12px;
+            cursor: pointer;
+            font-family: 'Noto Sans KR', sans-serif;
+            color: #888;
+        }
+
+        /* ── Stamp calendar ── */
+        .calendar-card {
+            background: white;
+            border-radius: 20px;
+            border: 2.5px solid var(--brown);
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 4px 4px 0 var(--mint);
+        }
+
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            margin-top: 6px;
+        }
+
+        .day-cell {
+            aspect-ratio: 1;
+            border-radius: 14px;
+            border: 2px solid #e8e0d5;
+            background: #fafafa;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .day-cell:hover:not(.future) {
+            transform: scale(1.08);
+        }
+
+        .day-cell .day-num {
+            font-size: 11px;
+            color: #bbb;
+            font-weight: 500;
+            line-height: 1;
+            margin-bottom: 2px;
+        }
+
+        .day-cell .day-label {
+            font-size: 9px;
+            color: #ccc;
+        }
+
+        .day-cell.stamped {
+            background: linear-gradient(135deg, #FFE27A, #FFD166);
+            border-color: var(--orange);
+            animation: stampPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .day-cell.stamped .day-num {
+            color: var(--brown);
+        }
+
+        .day-cell.stamped::after {
+            content: attr(data-emoji);
+            font-size: 24px;
+            position: absolute;
+        }
+
+        .day-cell.today {
+            border-color: var(--coral);
+            border-width: 2.5px;
+        }
+
+        .day-cell.today .day-num {
+            color: var(--coral);
+            font-weight: 700;
+        }
+
+        .day-cell.future {
+            opacity: 0.35;
+            cursor: default;
+        }
+
+        .day-cell.past:not(.stamped) {
+            background: #f5f5f5;
+        }
+
+        /* ── Today's check-in button ── */
+        .checkin-card {
+            background: linear-gradient(135deg, #FF6B6B, #FF9F43);
+            border-radius: 20px;
+            border: 2.5px solid var(--brown);
+            padding: 22px 24px;
+            margin-bottom: 24px;
+            box-shadow: 4px 4px 0 var(--brown);
+            text-align: center;
+            color: white;
+        }
+
+        .checkin-card h3 {
+            font-family: 'Gaegu', cursive;
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .checkin-card p {
+            font-size: 13px;
+            opacity: 0.9;
+            margin-bottom: 16px;
+        }
+
+        .btn-checkin {
+            background: white;
+            color: var(--coral);
+            border: 2.5px solid var(--brown);
+            border-radius: 16px;
+            padding: 14px 36px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Gaegu', cursive;
+            box-shadow: 3px 3px 0 var(--brown);
+            transition: all 0.15s;
+        }
+
+        .btn-checkin:hover {
+            transform: translateY(-2px);
+            box-shadow: 3px 5px 0 var(--brown);
+        }
+
+        .btn-checkin:active {
+            transform: translateY(1px);
+            box-shadow: 2px 2px 0 var(--brown);
+        }
+
+        .btn-checkin.done {
+            background: var(--green);
+            color: white;
+            cursor: default;
+            pointer-events: none;
+        }
+
+        /* ── Streak + Badges ── */
+        .streak-card {
+            background: white;
+            border-radius: 20px;
+            border: 2.5px solid var(--brown);
+            padding: 22px 24px;
+            margin-bottom: 24px;
+            box-shadow: 4px 4px 0 var(--purple);
+        }
+
+        .streak-display {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .streak-number {
+            font-family: 'Gaegu', cursive;
+            font-size: 56px;
+            color: var(--orange);
+            line-height: 1;
+            font-weight: 700;
+        }
+
+        .streak-info h4 {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--brown);
+        }
+
+        .streak-info p {
+            font-size: 12px;
+            color: #aaa;
+            margin-top: 2px;
+        }
+
+        .badges-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            background: #f9f9f9;
+            border: 2px solid #e8e0d5;
+            border-radius: 14px;
+            padding: 10px 14px;
+            min-width: 70px;
+            transition: all 0.2s;
+        }
+
+        .badge.unlocked {
+            background: linear-gradient(135deg, var(--sky), var(--purple));
+            border-color: var(--brown);
+            animation: badgeShine 0.5s ease;
+        }
+
+        .badge .badge-emoji {
+            font-size: 24px;
+        }
+
+        .badge .badge-name {
+            font-size: 10px;
+            font-weight: 700;
+            color: #bbb;
+            text-align: center;
+            line-height: 1.3;
+        }
+
+        .badge.unlocked .badge-name {
+            color: var(--brown);
+        }
+
+        /* ── Today's completers ── */
+        .completers-card {
+            background: white;
+            border-radius: 20px;
+            border: 2.5px solid var(--brown);
+            padding: 22px 24px;
+            margin-bottom: 24px;
+            box-shadow: 4px 4px 0 var(--pink);
+        }
+
+        .completers-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 6px;
+        }
+
+        .completer-chip {
+            background: linear-gradient(135deg, var(--mint), var(--sky));
+            border: 2px solid var(--brown);
+            border-radius: 20px;
+            padding: 6px 14px;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--brown);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .empty-state {
+            color: #ccc;
+            font-size: 14px;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        /* ── Leaderboard ── */
+        .leaderboard-card {
+            background: white;
+            border-radius: 20px;
+            border: 2.5px solid var(--brown);
+            padding: 22px 24px;
+            margin-bottom: 24px;
+            box-shadow: 4px 4px 0 var(--warm-yellow);
+        }
+
+        .leader-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            border-radius: 12px;
+            margin-bottom: 6px;
+            transition: background 0.2s;
+        }
+
+        .leader-item:hover {
+            background: #fafafa;
+        }
+
+        .leader-rank {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+            color: #bbb;
+            flex-shrink: 0;
+        }
+
+        .leader-rank.gold {
+            background: var(--warm-yellow);
+            color: var(--brown);
+        }
+
+        .leader-rank.silver {
+            background: #E0E0E0;
+            color: #666;
+        }
+
+        .leader-rank.bronze {
+            background: #FFCBA4;
+            color: var(--brown);
+        }
+
+        .leader-name {
+            flex: 1;
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--brown);
+        }
+
+        .leader-streak {
+            font-size: 12px;
+            color: #aaa;
+            background: #f5f5f5;
+            border-radius: 10px;
+            padding: 3px 10px;
+            font-weight: 600;
+        }
+
+        .leader-dots {
+            display: flex;
+            gap: 3px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #eee;
+            border: 1px solid #ddd;
+        }
+
+        .dot.filled {
+            background: var(--orange);
+            border-color: var(--brown);
+        }
+
+        /* ── Animations ── */
+        @keyframes wiggle {
+
+            0%,
+            100% {
+                transform: rotate(-3deg);
+            }
+
+            50% {
+                transform: rotate(3deg);
+            }
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes stampPop {
+            0% {
+                transform: scale(0);
+            }
+
+            70% {
+                transform: scale(1.2);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes popIn {
+            0% {
+                transform: scale(0.6);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes badgeShine {
+            0% {
+                transform: scale(0.8) rotate(-5deg);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        @keyframes confettiFall {
+            0% {
+                transform: translateY(-20px) rotate(0deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* ── Confetti ── */
+        .confetti-piece {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            border-radius: 2px;
+            pointer-events: none;
+            z-index: 9999;
+            animation: confettiFall 2s ease-in forwards;
+        }
+
+        /* ── Bible verse footer ── */
+        .verse-card {
+            background: linear-gradient(135deg, #5C3D2E, #8a6a5a);
+            border-radius: 20px;
+            border: 2.5px solid var(--brown);
+            padding: 24px;
+            color: white;
+            text-align: center;
+            box-shadow: 4px 4px 0 var(--brown);
+        }
+
+        .verse-text {
+            font-size: 14px;
+            line-height: 1.8;
+            opacity: 0.9;
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+
+        .verse-ref {
+            font-size: 13px;
+            opacity: 0.7;
+            font-weight: 700;
+        }
+
+        /* ── Toast ── */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--brown);
+            color: white;
+            border-radius: 20px;
+            padding: 14px 28px;
+            font-size: 14px;
+            font-weight: 700;
+            z-index: 10000;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* ── Modal ── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 5000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 24px;
+            border: 3px solid var(--brown);
+            padding: 32px 28px;
+            max-width: 320px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 6px 6px 0 var(--brown);
+            animation: bounceIn 0.4s ease;
+        }
+
+        .modal .emoji {
+            font-size: 56px;
+            margin-bottom: 12px;
+        }
+
+        .modal h3 {
+            font-family: 'Gaegu', cursive;
+            font-size: 22px;
+            color: var(--brown);
+            margin-bottom: 8px;
+        }
+
+        .modal p {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .btn-ok {
+            background: var(--coral);
+            color: white;
+            border: 2px solid var(--brown);
+            border-radius: 14px;
+            padding: 12px 32px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        /* Responsive tweaks */
+        @media (max-width: 400px) {
+            .days-grid {
+                gap: 6px;
+            }
+
+            .day-cell.stamped::after {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="header-badge">✨ 2026 봄 챌린지</div>
+        <div class="header-title">🏠 365 가정예배<br><span>챌린지</span></div>
+        <div class="header-sub">부활의 기쁨을 가정에서</div>
+        <div class="date-pill">📅 4월 6일(월) — 4월 18일(토) · 13일간</div>
+    </header>
+
+    <div class="container">
+
+        <!-- Name Input -->
+        <div class="login-card">
+            <div class="section-title">👤 내 이름 입력</div>
+            <div id="nameInputArea" class="name-row">
+                <input class="name-input" id="nameInput" type="text" placeholder="가정 대표자 이름 또는 가정 이름" maxlength="12">
+                <button class="btn-enter" onclick="setName()">확인 ✓</button>
+            </div>
+            <div id="currentUserArea" style="display:none">
+                <div class="current-user">
+                    <div class="user-chip" id="userChipLabel">👋 안녕하세요!</div>
+                    <button class="btn-change" onclick="changeName()">변경</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Today Check-in -->
+        <div class="checkin-card" id="checkinCard">
+            <h3 id="checkinTitle">🙏 오늘 예배를 드리셨나요?</h3>
+            <p id="checkinSub">체크인 버튼을 눌러 오늘의 예배를 기록하세요!</p>
+            <button class="btn-checkin" id="checkinBtn" onclick="checkIn()">오늘 예배 완료! 📖</button>
+        </div>
+
+        <!-- Stamp Calendar -->
+        <div class="calendar-card">
+            <div class="section-title">📅 나의 스탬프 달력</div>
+            <div class="days-grid" id="daysGrid"></div>
+        </div>
+
+        <!-- Streak + Badges -->
+        <div class="streak-card">
+            <div class="section-title">🔥 연속 예배 기록</div>
+            <div class="streak-display">
+                <div class="streak-number" id="streakNum">0</div>
+                <div class="streak-info">
+                    <h4>일 연속 🎉</h4>
+                    <p id="streakSubText">첫 예배를 기록해보세요!</p>
+                </div>
+            </div>
+            <div class="section-title" style="margin-bottom:10px">🏅 획득 뱃지</div>
+            <div class="badges-row" id="badgesRow"></div>
+        </div>
+
+        <!-- Today's completers -->
+        <div class="completers-card">
+            <div class="section-title">🎊 오늘 완료한 가정</div>
+            <div class="completers-list" id="completersList">
+                <div class="empty-state">⏳ 오늘 아직 완료한 분이 없어요</div>
+            </div>
+        </div>
+
+        <!-- Leaderboard -->
+        <div class="leaderboard-card">
+            <div class="section-title">🏆 연속 기록 순위</div>
+            <div id="leaderboard"></div>
+        </div>
+
+        <!-- Bible Verse -->
+        <div class="verse-card">
+            <div class="verse-text">
+                "오늘 내가 네게 명하는 이 말씀을 너는 마음에 새기고<br>
+                네 자녀에게 부지런히 가르치며 집에 앉았을 때에든지<br>
+                길을 갈 때에든지 이 말씀을 강론할 것이며"
+            </div>
+            <div class="verse-ref">— 신명기 6:6-7</div>
+        </div>
+
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="emoji" id="modalEmoji">🎉</div>
+            <h3 id="modalTitle">제목</h3>
+            <p id="modalBody">내용</p>
+            <button class="btn-ok" onclick="closeModal()">확인</button>
+        </div>
+    </div>
+
+    <script>
+        // ── Constants ──
+        const CHALLENGE_START = new Date(2026, 3, 6); // April 6
+        const CHALLENGE_END = new Date(2026, 3, 18); // April 18
+        const TOTAL_DAYS = 13;
+        const STAMP_EMOJIS = ['🙏', '✝️', '📖', '🕊️', '❤️', '🌟', '🌸', '☀️', '🌈', '🎵', '🕯️', '⭐', '🏡'];
+
+        const BADGES = [
+            { id: 'b1', days: 1, emoji: '🌱', name: '첫걸음', msg: '첫 번째 예배를 드렸어요!' },
+            { id: 'b3', days: 3, emoji: '🌿', name: '3일 연속', msg: '3일 연속 예배 달성!' },
+            { id: 'b5', days: 5, emoji: '🌻', name: '5일 연속', msg: '5일 연속! 습관이 시작됩니다' },
+            { id: 'b7', days: 7, emoji: '🌟', name: '일주일!', msg: '일주일 연속 예배! 놀라워요 🎉' },
+            { id: 'b10', days: 10, emoji: '👑', name: '10일 연속', msg: '10일 연속! 진정한 예배자!' },
+            { id: 'b13', days: 13, emoji: '🏆', name: '완주!', msg: '13일 완주! 하나님이 기뻐하십니다 💫' },
+        ];
+
+        // ── State (localStorage simulated per-user) ──
+        let currentUser = localStorage.getItem('wc_user') || '';
+
+        function getState() {
+            try { return JSON.parse(localStorage.getItem('wc_state') || '{}'); }
+            catch { return {}; }
+        }
+
+        function saveState(s) {
+            localStorage.setItem('wc_state', JSON.stringify(s));
+        }
+
+        function getUserData(name) {
+            const s = getState();
+            if (!s[name]) s[name] = { stamps: [], checkedToday: false, lastDate: '' };
+            return s[name];
+        }
+
+        // ── Date utils ──
+        function today() {
+            const d = new Date();
+            return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+        }
+
+        function challengeDay(d) {
+            // d = Date obj, returns 0-indexed day (0 = April 6)
+            return Math.floor((d - CHALLENGE_START) / 86400000);
+        }
+
+        function isInChallenge(d) {
+            return d >= CHALLENGE_START && d <= CHALLENGE_END;
+        }
+
+        // ── UI: Name ──
+        function setName() {
+            const val = document.getElementById('nameInput').value.trim();
+            if (!val) { showToast('⚠️ 이름을 입력해주세요'); return; }
+            currentUser = val;
+            localStorage.setItem('wc_user', val);
+            renderName();
+            render();
+        }
+
+        function changeName() {
+            document.getElementById('nameInputArea').style.display = 'flex';
+            document.getElementById('currentUserArea').style.display = 'none';
+        }
+
+        function renderName() {
+            if (!currentUser) {
+                document.getElementById('nameInputArea').style.display = 'flex';
+                document.getElementById('currentUserArea').style.display = 'none';
+            } else {
+                document.getElementById('nameInputArea').style.display = 'none';
+                document.getElementById('currentUserArea').style.display = 'block';
+                document.getElementById('userChipLabel').textContent = `👋 ${currentUser} 가정`;
+            }
+        }
+
+        // ── Check-in ──
+        function checkIn() {
+            if (!currentUser) { showToast('⚠️ 먼저 이름을 입력해주세요!'); return; }
+
+            const now = new Date();
+            if (!isInChallenge(now)) {
+                showToast('⚠️ 챌린지 기간이 아닙니다');
+                return;
+            }
+
+            const state = getState();
+            if (!state[currentUser]) state[currentUser] = { stamps: [], lastDate: '' };
+            const u = state[currentUser];
+
+            const t = today();
+            if (u.stamps.includes(t)) {
+                showToast('✅ 오늘은 이미 완료했어요!');
+                return;
+            }
+
+            u.stamps.push(t);
+            u.lastDate = t;
+            saveState(state);
+
+            spawnConfetti();
+            render();
+
+            const streak = calcStreak(u.stamps);
+            const newBadge = BADGES.filter(b => b.days === streak)[0];
+            if (newBadge) {
+                setTimeout(() => showModal(newBadge.emoji, `🏅 새 뱃지 획득!`, `"${newBadge.name}" 뱃지를 획득했어요!\n${newBadge.msg}`), 800);
+            } else {
+                setTimeout(() => showModal('🙏', `예배 완료!`, `${streak}일째 예배를 드렸어요.\n오늘도 수고하셨습니다!`), 600);
+            }
+        }
+
+        // ── Streak calc ──
+        function calcStreak(stamps) {
+            if (!stamps || stamps.length === 0) return 0;
+            const sorted = [...stamps].sort();
+            let streak = 0;
+            const d = new Date();
+            // Walk back from today
+            for (let i = 0; i < 13; i++) {
+                const key = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+                if (sorted.includes(key)) {
+                    streak++;
+                    d.setDate(d.getDate() - 1);
+                } else {
+                    break;
+                }
+            }
+            return streak;
+        }
+
+        // ── Render calendar ──
+        function renderCalendar() {
+            const grid = document.getElementById('daysGrid');
+            grid.innerHTML = '';
+            const u = currentUser ? getUserData(currentUser) : { stamps: [] };
+            const now = new Date();
+
+            for (let i = 0; i < TOTAL_DAYS; i++) {
+                const d = new Date(CHALLENGE_START);
+                d.setDate(d.getDate() + i);
+                const key = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+                const dayLabels = ['일', '월', '화', '수', '목', '금', '토'];
+
+                const cell = document.createElement('div');
+                cell.className = 'day-cell';
+
+                const nowDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                const cellDate = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+
+                const isStamped = u.stamps.includes(key);
+                const isToday = cellDate.getTime() === nowDate.getTime();
+                const isFuture = cellDate > nowDate;
+
+                if (isStamped) { cell.classList.add('stamped'); cell.setAttribute('data-emoji', STAMP_EMOJIS[i % STAMP_EMOJIS.length]); }
+                if (isToday) cell.classList.add('today');
+                if (isFuture) cell.classList.add('future');
+                else if (!isStamped) cell.classList.add('past');
+
+                cell.innerHTML = `
+      <span class="day-num">${d.getMonth() + 1}/${d.getDate()}</span>
+      <span class="day-label">${dayLabels[d.getDay()]}</span>
+    `;
+                grid.appendChild(cell);
+            }
+        }
+
+        // ── Render streak & badges ──
+        function renderStreak() {
+            const u = currentUser ? getUserData(currentUser) : { stamps: [] };
+            const streak = calcStreak(u.stamps);
+            document.getElementById('streakNum').textContent = streak;
+
+            const subs = ['첫 예배를 기록해보세요!', '훌륭해요! 계속 이어가요 💪', '정말 대단해요! 🌿', '멈추지 마세요! 🌻', '놀라운 헌신입니다! 🌟', '하나님이 기뻐하십니다 ✨'];
+            const si = Math.min(Math.floor(streak / 2), subs.length - 1);
+            document.getElementById('streakSubText').textContent = streak === 0 ? subs[0] : (streak >= 10 ? subs[5] : streak >= 7 ? subs[4] : streak >= 5 ? subs[3] : streak >= 3 ? subs[2] : subs[1]);
+
+            const row = document.getElementById('badgesRow');
+            row.innerHTML = '';
+            BADGES.forEach(b => {
+                const div = document.createElement('div');
+                div.className = 'badge' + (streak >= b.days ? ' unlocked' : '');
+                div.innerHTML = `<span class="badge-emoji">${b.emoji}</span><span class="badge-name">${b.name}</span>`;
+                if (streak >= b.days) div.title = b.msg;
+                row.appendChild(div);
+            });
+        }
+
+        // ── Render today's completers ──
+        function renderCompleters() {
+            const state = getState();
+            const t = today();
+            const list = document.getElementById('completersList');
+            const completers = Object.keys(state).filter(name => state[name].stamps && state[name].stamps.includes(t));
+
+            list.innerHTML = '';
+            if (completers.length === 0) {
+                list.innerHTML = '<div class="empty-state">⏳ 오늘 아직 완료한 가정이 없어요</div>';
+                return;
+            }
+            completers.forEach(name => {
+                const chip = document.createElement('div');
+                chip.className = 'completer-chip';
+                chip.textContent = `🏠 ${name}`;
+                list.appendChild(chip);
+            });
+        }
+
+        // ── Render leaderboard ──
+        function renderLeaderboard() {
+            const state = getState();
+            const board = document.getElementById('leaderboard');
+
+            const entries = Object.keys(state).map(name => {
+                const u = state[name];
+                return { name, streak: calcStreak(u.stamps || []), total: (u.stamps || []).length };
+            }).sort((a, b) => b.streak - a.streak || b.total - a.total).slice(0, 8);
+
+            if (entries.length === 0) {
+                board.innerHTML = '<div class="empty-state">아직 참여자가 없어요 — 첫 번째가 되어보세요!</div>';
+                return;
+            }
+
+            board.innerHTML = '';
+            entries.forEach((e, idx) => {
+                const item = document.createElement('div');
+                item.className = 'leader-item';
+
+                const rankClass = idx === 0 ? 'gold' : idx === 1 ? 'silver' : idx === 2 ? 'bronze' : '';
+                const rankLabel = idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : idx + 1;
+
+                const dotsHtml = Array.from({ length: TOTAL_DAYS }, (_, i) => {
+                    const d = new Date(CHALLENGE_START);
+                    d.setDate(d.getDate() + i);
+                    const key = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+                    const filled = (state[e.name].stamps || []).includes(key);
+                    return `<div class="dot${filled ? ' filled' : ''}"></div>`;
+                }).join('');
+
+                item.innerHTML = `
+      <div class="leader-rank ${rankClass}">${rankLabel}</div>
+      <div class="leader-name">${e.name}</div>
+      <div class="leader-dots">${dotsHtml}</div>
+      <div class="leader-streak">${e.streak}일 🔥</div>
+    `;
+                board.appendChild(item);
+            });
+        }
+
+        // ── Render check-in card ──
+        function renderCheckin() {
+            const now = new Date();
+            const btn = document.getElementById('checkinBtn');
+            const title = document.getElementById('checkinTitle');
+            const sub = document.getElementById('checkinSub');
+            const card = document.getElementById('checkinCard');
+
+            if (!isInChallenge(now)) {
+                if (now < CHALLENGE_START) {
+                    title.textContent = '⏳ 챌린지가 곧 시작됩니다!';
+                    sub.textContent = `4월 6일부터 시작됩니다. 기대해주세요 🎉`;
+                    btn.style.display = 'none';
+                } else {
+                    title.textContent = '🎊 챌린지가 끝났어요!';
+                    sub.textContent = '함께해주셔서 감사합니다. 수고하셨습니다!';
+                    btn.style.display = 'none';
+                }
+                return;
+            }
+
+            btn.style.display = '';
+            const u = currentUser ? getUserData(currentUser) : null;
+            const t = today();
+            const done = u && u.stamps && u.stamps.includes(t);
+
+            if (done) {
+                btn.className = 'btn-checkin done';
+                btn.textContent = '✅ 오늘 예배 완료!';
+                title.textContent = '🙌 오늘 예배를 드렸어요!';
+                sub.textContent = '내일도 함께해요. 하나님이 기뻐하십니다 💛';
+                card.style.background = 'linear-gradient(135deg, #6BCB77, #52B788)';
+            } else {
+                btn.className = 'btn-checkin';
+                btn.textContent = '오늘 예배 완료! 📖';
+                title.textContent = '🙏 오늘 예배를 드리셨나요?';
+                sub.textContent = '체크인 버튼을 눌러 오늘의 예배를 기록하세요!';
+                card.style.background = 'linear-gradient(135deg, #FF6B6B, #FF9F43)';
+            }
+        }
+
+        // ── Master render ──
+        function render() {
+            renderName();
+            renderCalendar();
+            renderStreak();
+            renderCompleters();
+            renderLeaderboard();
+            renderCheckin();
+        }
+
+        // ── Confetti ──
+        function spawnConfetti() {
+            const colors = ['#FFD166', '#FF6B6B', '#A8E6CF', '#B8E4F9', '#C9B8E8', '#FF9F43'];
+            for (let i = 0; i < 40; i++) {
+                const el = document.createElement('div');
+                el.className = 'confetti-piece';
+                el.style.left = Math.random() * 100 + 'vw';
+                el.style.top = '0';
+                el.style.background = colors[Math.floor(Math.random() * colors.length)];
+                el.style.transform = `rotate(${Math.random() * 360}deg)`;
+                el.style.animationDuration = (1.5 + Math.random()) + 's';
+                el.style.animationDelay = Math.random() * 0.5 + 's';
+                document.body.appendChild(el);
+                setTimeout(() => el.remove(), 3000);
+            }
+        }
+
+        // ── Toast ──
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2800);
+        }
+
+        // ── Modal ──
+        function showModal(emoji, title, body) {
+            document.getElementById('modalEmoji').textContent = emoji;
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalBody').textContent = body;
+            document.getElementById('modalOverlay').classList.add('open');
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('open');
+        }
+
+        // ── Enter key support ──
+        document.getElementById('nameInput').addEventListener('keydown', e => {
+            if (e.key === 'Enter') setName();
+        });
+
+        // ── Init ──
+        render();
+    </script>
+</body>
+
+</html>

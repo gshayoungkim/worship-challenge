@@ -1,65 +1,153 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { Heart, User, Lock, AlertCircle, Loader2 } from 'lucide-react';
+
+interface Household {
+  id: string;
+  household_name: string;
+  display_name: string;
+}
+
+export default function LoginPage() {
+  const router = useRouter();
+  const [households, setHouseholds] = useState<Household[]>([]);
+  const [selectedId, setSelectedId] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [pageLoading, setPageLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch('/api/auth/session')
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.authenticated) {
+          router.replace('/dashboard');
+        } else {
+          setPageLoading(false);
+        }
+      })
+      .catch(() => setPageLoading(false));
+
+    fetch('/api/households')
+      .then((r) => r.json())
+      .then((data) => setHouseholds(data.households || []))
+      .catch(console.error);
+  }, [router]);
+
+  const handleLogin = async () => {
+    if (!selectedId || !password) return;
+    setError(null);
+    setLoading(true);
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ householdName: selectedId, password }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || '로그인 실패');
+      router.replace('/dashboard');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : '로그인 중 오류가 발생했습니다.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (pageLoading) {
+    return (
+      <div className="min-h-screen bg-[#FFF9F0] flex items-center justify-center">
+        <Loader2 className="animate-spin text-amber-500" size={48} />
+      </div>
+    );
+  }
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div className="min-h-screen bg-[#FFF9F0] flex flex-col items-center justify-center p-6">
+      <div className="w-full max-w-sm space-y-8 text-center">
+
+        {/* Logo */}
+        <div className="space-y-4">
+          <div
+            className="w-20 h-20 bg-amber-500 rounded-3xl flex items-center justify-center text-white shadow-2xl mx-auto"
+            style={{ transform: 'rotate(3deg)' }}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+            <Heart fill="currentColor" size={40} />
+          </div>
+          <div>
+            <h1 className="text-3xl font-black text-amber-900 tracking-tight">365 가정예배</h1>
+            <p className="text-amber-600 font-bold text-sm">부활절 13일 챌린지 · 4/6 – 4/18</p>
+          </div>
+        </div>
+
+        {/* Login Card */}
+        <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-xl border border-white/50 space-y-4 text-left">
+
+          <div className="space-y-2">
+            <label className="text-xs font-black text-amber-800 ml-1 flex items-center gap-1">
+              <User size={12} /> 우리 가정 선택
+            </label>
+            <select
+              value={selectedId}
+              onChange={(e) => setSelectedId(e.target.value)}
+              className="w-full bg-amber-50 border-2 border-amber-100 rounded-2xl px-4 py-3 text-sm font-bold focus:outline-none focus:border-amber-400 transition-colors"
+              style={{ appearance: 'none' }}
+            >
+              <option value="">가정을 선택해주세요</option>
+              {households.map((h) => (
+                <option key={h.id} value={h.household_name}>{h.display_name}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-xs font-black text-amber-800 ml-1 flex items-center gap-1">
+              <Lock size={12} /> 비밀번호
+            </label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
+              placeholder="비밀번호를 입력하세요"
+              className="w-full bg-amber-50 border-2 border-amber-100 rounded-2xl px-4 py-3 text-sm font-bold focus:outline-none focus:border-amber-400 transition-colors"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+          </div>
+
+          {error && (
+            <div className="flex items-center gap-2 text-red-500 text-xs font-bold bg-red-50 p-3 rounded-xl">
+              <AlertCircle size={14} />
+              {error}
+            </div>
+          )}
+
+          <button
+            id="login-button"
+            onClick={handleLogin}
+            disabled={!selectedId || !password || loading}
+            className="w-full flex items-center justify-center gap-2 px-6 py-4 rounded-2xl font-bold transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed bg-amber-500 hover:bg-amber-600 text-white shadow-md mt-2"
           >
-            Documentation
-          </a>
+            {loading ? <Loader2 className="animate-spin" size={20} /> : null}
+            로그인하기
+          </button>
+
+          <div className="pt-4 border-t border-amber-100">
+            <button
+              onClick={() => router.push('/admin')}
+              className="w-full text-xs font-bold text-amber-400 hover:text-amber-600 transition-colors flex items-center justify-center gap-2 py-1"
+            >
+              <Lock size={12} /> 관리자 로그인
+            </button>
+          </div>
         </div>
-      </main>
+
+        <p className="text-[10px] text-amber-400 font-bold">
+          © 2026 Church Family Worship Challenge
+        </p>
+      </div>
     </div>
   );
 }
