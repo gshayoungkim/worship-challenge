@@ -26,7 +26,7 @@ export default function CheckInPage() {
   };
 
   const handleSubmit = async () => {
-    if (files.length === 0) return;
+    if (files.length === 0 && !message.trim()) return;
     setError(null);
     setLoading(true);
 
@@ -70,7 +70,7 @@ export default function CheckInPage() {
           <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-xl border border-white/50 space-y-4">
             <div className="space-y-2">
               <label className="text-xs font-black text-amber-800 ml-1">
-                예배 사진 업로드 <span className="text-amber-400 font-normal">(최대 3장)</span>
+                예배 사진 업로드 <span className="text-amber-400 font-normal">(선택, 최대 3장)</span>
               </label>
 
               {previews.length === 0 ? (
@@ -121,6 +121,17 @@ export default function CheckInPage() {
               )}
             </div>
 
+            {/* Example Photos */}
+            <div className="bg-amber-50/50 rounded-2xl p-4 border border-amber-50 space-y-2">
+              <p className="text-[10px] font-black text-amber-700 flex items-center gap-1">
+                ✨ 이런 사진을 올려주세요!
+              </p>
+              <div className="grid grid-cols-2 gap-2">
+                <img src="/example1.jpeg" alt="예시사진 1" className="w-full h-24 object-cover rounded-xl" />
+                <img src="/example2.jpeg" alt="예시사진 2" className="w-full h-24 object-cover rounded-xl" />
+              </div>
+            </div>
+
             {/* Message */}
             <div className="space-y-2">
               <label className="text-xs font-black text-amber-800 ml-1">
@@ -147,7 +158,7 @@ export default function CheckInPage() {
             <button
               id="submit-checkin"
               onClick={handleSubmit}
-              disabled={files.length === 0 || loading}
+              disabled={(files.length === 0 && !message.trim()) || loading}
               className="w-full flex items-center justify-center gap-2 px-6 py-4 rounded-2xl font-black text-base bg-amber-500 hover:bg-amber-600 text-white shadow-md transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (

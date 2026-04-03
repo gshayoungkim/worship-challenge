@@ -67,9 +67,9 @@ export async function POST(request: NextRequest) {
     const message = formData.get('message') as string | null;
     const photos = formData.getAll('photos') as File[];
 
-    if (!photos || photos.length === 0) {
+    if ((!photos || photos.length === 0) && !message?.trim()) {
       return Response.json(
-        { error: '사진을 1장 이상 업로드해주세요.' },
+        { error: '사진을 업로드하거나 오늘의 한줄 고백을 작성해주세요.' },
         { status: 400 }
       );
     }
@@ -159,8 +159,8 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    if (photoUrls.length === 0) {
-      throw new Error('업로드된 사진이 없습니다. Storage 설정을 확인해주세요.');
+    if (photos.length > 0 && photoUrls.length === 0) {
+      throw new Error('사진 업로드에 실패했습니다. Storage 설정을 확인해주세요.');
     }
 
     // Calculate streak and check for new badges

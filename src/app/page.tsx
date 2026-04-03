@@ -71,11 +71,8 @@ export default function LoginPage() {
 
         {/* Logo */}
         <div className="space-y-4">
-          <div
-            className="w-20 h-20 bg-amber-500 rounded-3xl flex items-center justify-center text-white shadow-2xl mx-auto"
-            style={{ transform: 'rotate(3deg)' }}
-          >
-            <Heart fill="currentColor" size={40} />
+          <div className="w-24 h-24 mx-auto">
+            <img src="/아이콘2.png" alt="로고" className="w-full h-full object-contain drop-shadow-xl" />
           </div>
           <div>
             <h1 className="text-3xl font-black text-amber-900 tracking-tight">동행교회 365 가정예배</h1>

@@ -372,9 +372,7 @@ export default function Dashboard() {
       {/* ── Header ── */}
       <header className="sticky top-0 z-50 bg-white/70 backdrop-blur-md border-b border-amber-100 px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center text-white shadow-lg">
-            <Heart fill="currentColor" size={20} />
-          </div>
+          <img src="/아이콘2.png" alt="로고" className="w-11 h-11 object-contain drop-shadow-sm pb-1" />
           <div>
             <h1 className="text-sm font-black text-amber-900 leading-tight">365 가정예배</h1>
             <p className="text-[10px] text-amber-600 font-bold uppercase tracking-wider">Challenge 2026</p>
