@@ -1,7 +1,7 @@
 import { supabase, supabaseAdmin } from '@/lib/supabase';
 import { getSession } from '@/lib/auth';
 import { type NextRequest } from 'next/server';
-import { getTodayKST } from '@/lib/constants';
+import { getTodayKST, isInChallengePeriod } from '@/lib/constants';
 
 function extractStoragePath(imageUrl: string): string | null {
   const marker = '/storage/v1/object/public/checkin-photos/';
@@ -83,6 +83,14 @@ export async function POST(request: NextRequest) {
 
     // Get today's date in KST
     const challengeDate = getTodayKST();
+
+    // Guard: only allow check-in during the challenge period
+    if (!isInChallengePeriod(challengeDate)) {
+      return Response.json(
+        { error: '챌린지 기간(4/6 ~ 4/18)에만 인증이 가능합니다.' },
+        { status: 403 }
+      );
+    }
 
     // Check if already checked in today
     const { data: existing } = await supabase
