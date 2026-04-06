@@ -47,10 +47,8 @@ export function getTodayKST(): string {
 }
 
 export function isInChallengePeriod(dateStr: string): boolean {
-  const date = new Date(dateStr);
-  const start = new Date('2026-04-06');
-  const end = new Date('2026-04-18');
-  return date >= start && date <= end;
+  // 문자열 비교: 'YYYY-MM-DD' 포맷이므로 UTC 파싱 시차 문제 없음
+  return dateStr >= '2026-04-06' && dateStr <= '2026-04-18';
 }
 
 export function getChallengeDay(dateStr: string): number {
