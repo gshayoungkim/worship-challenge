@@ -108,7 +108,12 @@ function CommunityTab({ stats, todayStr }: { stats: StatsData; todayStr: string 
   const [selectedDate, setSelectedDate] = useState(todayStr);
   const [checkins, setCheckins] = useState<CheckinItem[]>([]);
   const [galleryLoading, setGalleryLoading] = useState(false);
-  const [selectedPhoto, setSelectedPhoto] = useState<{ url: string; name: string; message: string | null } | null>(null);
+  const [selectedPhoto, setSelectedPhoto] = useState<{
+    photos: Array<{ id: string; image_url: string }>;
+    index: number;
+    name: string;
+    message: string | null;
+  } | null>(null);
 
   const fetchCheckins = useCallback(async (date: string) => {
     setGalleryLoading(true);
@@ -207,7 +212,7 @@ function CommunityTab({ stats, todayStr }: { stats: StatsData; todayStr: string 
                   <div
                     key={c.id}
                     className="rounded-2xl overflow-hidden cursor-pointer hover:scale-105 transition-transform shadow-sm"
-                    onClick={() => setSelectedPhoto({ url: c.checkin_photos[0].image_url, name: `${c.households?.display_name} 가정`, message: c.message })}
+                    onClick={() => setSelectedPhoto({ photos: c.checkin_photos, index: 0, name: `${c.households?.display_name} 가정`, message: c.message })}
                   >
                     <img
                       src={c.checkin_photos[0].image_url}
@@ -260,9 +265,17 @@ function CommunityTab({ stats, todayStr }: { stats: StatsData; todayStr: string 
           className="fixed inset-0 bg-black/80 z-[9999] flex items-center justify-center p-4"
           onClick={() => setSelectedPhoto(null)}
         >
-          <div className="max-w-sm w-full space-y-2" onClick={(e) => e.stopPropagation()}>
+          <div className="max-w-sm w-full space-y-3" onClick={(e) => e.stopPropagation()}>
+            {/* Header */}
             <div className="flex items-center justify-between px-1">
-              <p className="text-white font-black text-sm">🏠 {selectedPhoto.name}</p>
+              <p className="text-white font-black text-sm">
+                🏠 {selectedPhoto.name}
+                {selectedPhoto.photos.length > 1 && (
+                  <span className="ml-2 text-white/60 font-bold text-xs">
+                    {selectedPhoto.index + 1} / {selectedPhoto.photos.length}
+                  </span>
+                )}
+              </p>
               <button
                 onClick={() => setSelectedPhoto(null)}
                 className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center text-white"
@@ -270,11 +283,49 @@ function CommunityTab({ stats, todayStr }: { stats: StatsData; todayStr: string 
                 ✕
               </button>
             </div>
-            <img
-              src={selectedPhoto.url}
-              alt="Worship photo"
-              className="w-full rounded-2xl"
-            />
+
+            {/* Image with nav buttons */}
+            <div className="relative">
+              <img
+                src={selectedPhoto.photos[selectedPhoto.index].image_url}
+                alt="Worship photo"
+                className="w-full rounded-2xl"
+              />
+              {selectedPhoto.photos.length > 1 && (
+                <>
+                  <button
+                    onClick={() => setSelectedPhoto(p => p && p.index > 0 ? { ...p, index: p.index - 1 } : p)}
+                    disabled={selectedPhoto.index === 0}
+                    className="absolute left-2 top-1/2 -translate-y-1/2 w-9 h-9 bg-black/40 hover:bg-black/60 disabled:opacity-20 rounded-full flex items-center justify-center text-white transition-all"
+                  >
+                    <ChevronLeft size={20} />
+                  </button>
+                  <button
+                    onClick={() => setSelectedPhoto(p => p && p.index < p.photos.length - 1 ? { ...p, index: p.index + 1 } : p)}
+                    disabled={selectedPhoto.index === selectedPhoto.photos.length - 1}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 bg-black/40 hover:bg-black/60 disabled:opacity-20 rounded-full flex items-center justify-center text-white transition-all"
+                  >
+                    <ChevronRight size={20} />
+                  </button>
+                </>
+              )}
+            </div>
+
+            {/* Dot indicators */}
+            {selectedPhoto.photos.length > 1 && (
+              <div className="flex justify-center gap-1.5">
+                {selectedPhoto.photos.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setSelectedPhoto(p => p ? { ...p, index: i } : p)}
+                    className={`w-2 h-2 rounded-full transition-all ${
+                      i === selectedPhoto.index ? 'bg-white scale-125' : 'bg-white/40'
+                    }`}
+                  />
+                ))}
+              </div>
+            )}
+
             {selectedPhoto.message && (
               <div className="bg-amber-50 rounded-2xl p-3 shadow-lg">
                 <p className="text-sm text-amber-800 leading-relaxed font-medium text-center">"{selectedPhoto.message}"</p>
