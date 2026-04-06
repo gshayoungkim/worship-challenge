@@ -343,7 +343,7 @@ export default function AdminPage() {
                       <div className={`w-3 h-3 rounded-full mt-1 sm:mt-0 shrink-0 ${h.is_active ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.4)]' : 'bg-gray-300'}`} />
                       <div>
                         <div className="font-black text-amber-900 flex items-center gap-2">
-                          {h.display_name}
+                          {h.display_name} 가정
                           {h.is_admin && (
                             <span className="text-[9px] px-2 py-0.5 rounded-full bg-purple-100 text-purple-700 font-bold uppercase tracking-wider">
                               Admin
@@ -445,7 +445,7 @@ export default function AdminPage() {
                         <div>
                           <div className="flex justify-between items-start gap-2">
                             <span className="font-black text-amber-900 truncate flex-1">
-                              {c.households?.display_name}
+                              {c.households?.display_name} 가정
                             </span>
                             <span className="text-[10px] font-bold text-amber-500 bg-amber-100 px-2 py-0.5 rounded-full shrink-0">
                               {c.challenge_date}

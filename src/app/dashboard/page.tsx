@@ -195,7 +195,7 @@ function CommunityTab({ stats, todayStr }: { stats: StatsData; todayStr: string 
                   key={c.id}
                   className="inline-flex items-center gap-1 bg-amber-100 text-amber-800 text-xs font-black px-3 py-1 rounded-full border border-amber-200"
                 >
-                  🏠 {c.households?.display_name}
+                  🏠 {c.households?.display_name} 가정
                 </span>
               ))}
             </div>
@@ -207,7 +207,7 @@ function CommunityTab({ stats, todayStr }: { stats: StatsData; todayStr: string 
                   <div
                     key={c.id}
                     className="rounded-2xl overflow-hidden cursor-pointer hover:scale-105 transition-transform shadow-sm"
-                    onClick={() => setSelectedPhoto({ url: c.checkin_photos[0].image_url, name: c.households?.display_name, message: c.message })}
+                    onClick={() => setSelectedPhoto({ url: c.checkin_photos[0].image_url, name: `${c.households?.display_name} 가정`, message: c.message })}
                   >
                     <img
                       src={c.checkin_photos[0].image_url}
@@ -216,7 +216,7 @@ function CommunityTab({ stats, todayStr }: { stats: StatsData; todayStr: string 
                       loading="lazy"
                     />
                     <div className="bg-amber-50 px-2 py-1">
-                      <p className="text-[10px] font-black text-amber-700 truncate">🏠 {c.households?.display_name}</p>
+                      <p className="text-[10px] font-black text-amber-700 truncate">🏠 {c.households?.display_name} 가정</p>
                       {c.message && (
                         <p className="text-[9px] text-amber-400 truncate">"{c.message}"</p>
                       )}
@@ -244,7 +244,7 @@ function CommunityTab({ stats, todayStr }: { stats: StatsData; todayStr: string 
                 <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-black shrink-0 bg-amber-50 text-amber-400 border border-amber-100">
                   {idx + 1}
                 </div>
-                <p className="flex-1 text-sm font-black text-amber-900">{entry.displayName}</p>
+                <p className="flex-1 text-sm font-black text-amber-900">{entry.displayName} 가정</p>
                 <span className="text-xs font-bold text-amber-400 bg-amber-50 px-2 py-0.5 rounded-full">
                   총 {entry.total}일 인증
                 </span>
@@ -320,6 +320,11 @@ export default function Dashboard() {
   }, [router]);
 
   useEffect(() => { fetchData(); }, [fetchData]);
+
+  // 공동체 탭으로 전환 시 stats 재조회 (숫자 실시간 반영)
+  useEffect(() => {
+    if (view === 'community') fetchData();
+  }, [view, fetchData]);
 
   const handleLogout = async () => {
     await fetch('/api/auth/logout', { method: 'POST' });
