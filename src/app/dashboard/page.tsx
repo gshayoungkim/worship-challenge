@@ -265,7 +265,11 @@ function CommunityTab({ stats, todayStr }: { stats: StatsData; todayStr: string 
           className="fixed inset-0 bg-black/80 z-[9999] flex items-center justify-center p-4"
           onClick={() => setSelectedPhoto(null)}
         >
-          <div className="max-w-sm w-full space-y-3" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="max-w-sm w-full flex flex-col"
+            style={{ maxHeight: 'calc(100dvh - 2rem)' }}
+            onClick={(e) => e.stopPropagation()}
+          >
             {/* Header */}
             <div className="flex items-center justify-between px-1">
               <p className="text-white font-black text-sm">
@@ -285,11 +289,12 @@ function CommunityTab({ stats, todayStr }: { stats: StatsData; todayStr: string 
             </div>
 
             {/* Image with nav buttons */}
-            <div className="relative">
+            <div className="relative my-3" style={{ maxHeight: '55dvh' }}>
               <img
                 src={selectedPhoto.photos[selectedPhoto.index].image_url}
                 alt="Worship photo"
-                className="w-full rounded-2xl"
+                className="w-full rounded-2xl object-contain"
+                style={{ maxHeight: '55dvh' }}
               />
               {selectedPhoto.photos.length > 1 && (
                 <>
