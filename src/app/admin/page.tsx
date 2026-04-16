@@ -176,16 +176,29 @@ export default function AdminPage() {
   const downloadCSV = () => {
     if (!checkins.length) return;
 
+    // RFC 4180: wrap each field in double-quotes and escape any existing double-quotes
+    const escapeField = (value: string | number) => {
+      const str = String(value ?? '');
+      // If the field contains a comma, double-quote, or newline, wrap in quotes
+      if (/[,"\n\r]/.test(str)) {
+        return `"${str.replace(/"/g, '""')}"`;
+      }
+      return str;
+    };
+
     const headers = ['가정명', '인증 날짜', '메시지', '인증 시간', '사진 수'];
     const rows = checkins.map(c => [
       c.households?.display_name || '',
       c.challenge_date,
-      (c.message || '').replace(/,/g, ' '), // sanitize commas
+      c.message || '',
       new Date(c.created_at).toLocaleString('ko-KR'),
       c.checkin_photos?.length || 0,
     ]);
 
-    const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+    const csv = [
+      headers.map(escapeField).join(','),
+      ...rows.map(r => r.map(escapeField).join(',')),
+    ].join('\n');
     const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
